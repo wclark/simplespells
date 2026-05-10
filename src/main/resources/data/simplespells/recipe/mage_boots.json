@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "L": {
+      "item": "minecraft:leather"
+    },
+    "R": {
+      "item": "simplespells:raw_emitite"
+    }
+  },
+  "pattern": [
+    "L L",
+    "R R"
+  ],
+  "result": {
+    "count": 1,
+    "id": "simplespells:mage_boots"
+  }
+}

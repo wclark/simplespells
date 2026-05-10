@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "E": {
+      "item": "simplespells:emitite"
+    },
+    "L": {
+      "item": "minecraft:leather"
+    }
+  },
+  "pattern": [
+    "LEL",
+    "L L"
+  ],
+  "result": {
+    "count": 1,
+    "id": "simplespells:mage_hat"
+  }
+}
