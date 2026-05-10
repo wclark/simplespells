@@ -1,0 +1,13 @@
+{
+  "itemGroup.simplespells": "Simple Spells",
+  "block.simplespells.example_block": "Example Block",
+  "item.simplespells.example_item": "Example Item",
+
+  "simplespells.configuration.title": "Simple Spells Configs",
+  "simplespells.configuration.section.simplespells.common.toml": "Simple Spells Configs",
+  "simplespells.configuration.section.simplespells.common.toml.title": "Simple Spells Configs",
+  "simplespells.configuration.items": "Item List",
+  "simplespells.configuration.logDirtBlock": "Log Dirt Block",
+  "simplespells.configuration.magicNumberIntroduction": "Magic Number Text",
+  "simplespells.configuration.magicNumber": "Magic Number"
+}

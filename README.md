@@ -1,7 +1,7 @@
 
-# NeoForge 1.21.1 Mod
+# Simple Spells
 
-Starter NeoForge mod project for Minecraft 1.21.1.
+Simple Spells is a NeoForge mod for Minecraft 1.21.1.
 
 ## Versions
 
