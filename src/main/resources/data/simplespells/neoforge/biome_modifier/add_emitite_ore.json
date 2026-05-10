@@ -1,0 +1,11 @@
+{
+  "type": "neoforge:add_features",
+  "biomes": "#minecraft:is_overworld",
+  "features": [
+    "simplespells:ore_emitite",
+    "simplespells:ore_emitite_medium",
+    "simplespells:ore_emitite_large",
+    "simplespells:ore_emitite_buried"
+  ],
+  "step": "underground_ores"
+}

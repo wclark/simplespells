@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "E": {
+      "item": "simplespells:emitite"
+    },
+    "L": {
+      "item": "minecraft:leather"
+    },
+    "R": {
+      "item": "simplespells:raw_emitite"
+    }
+  },
+  "pattern": [
+    "L L",
+    "LEL",
+    "LRL"
+  ],
+  "result": {
+    "count": 1,
+    "id": "simplespells:mage_robes"
+  }
+}
