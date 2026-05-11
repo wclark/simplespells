@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:generic",
+  "pools": [
+    {
+      "rolls": 1,
+      "conditions": [
+        {
+          "condition": "minecraft:random_chance",
+          "chance": 0.33333334
+        }
+      ],
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "simplespells:magibulb_seeds"
+        }
+      ]
+    }
+  ],
+  "random_sequence": "simplespells:gameplay/magibulb_seed_from_sniffer"
+}

@@ -13,6 +13,7 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvents;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
@@ -22,6 +23,7 @@ import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.CreativeModeTabs;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemNameBlockItem;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
@@ -38,6 +40,7 @@ import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.BuildCreativeModeTabContentsEvent;
+import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent;
 import net.neoforged.neoforge.event.server.ServerStartingEvent;
 import net.neoforged.neoforge.registries.DeferredBlock;
 import net.neoforged.neoforge.registries.DeferredHolder;
@@ -62,6 +65,11 @@ public class SimpleSpells {
     public static final DeferredItem<Item> RAW_EMITITE = ITEMS.registerSimpleItem("raw_emitite");
     public static final DeferredItem<Item> EMITITE = ITEMS.registerSimpleItem("emitite");
     public static final DeferredItem<Item> MAGIC_DUST = ITEMS.registerSimpleItem("magic_dust");
+    public static final DeferredItem<Item> TORMENTITE_SHARD = ITEMS.registerSimpleItem("tormentite_shard");
+    public static final DeferredItem<Item> TORMENTITE_CRYSTAL = ITEMS.registerSimpleItem("tormentite_crystal");
+    public static final DeferredItem<Item> DEATH_ESSENCE = ITEMS.registerSimpleItem("death_essence");
+    public static final DeferredItem<Item> MAGIBULB = ITEMS.registerSimpleItem("magibulb");
+    public static final DeferredItem<Item> LIFE_ESSENCE = ITEMS.registerSimpleItem("life_essence");
     public static final DeferredItem<MageStaffItem> MAGE_STAFF = ITEMS.register("mage_staff", () -> new MageStaffItem(new Item.Properties().stacksTo(1)));
 
     public static final DeferredHolder<EntityType<?>, EntityType<SpellProjectile>> SPELL_PROJECTILE = ENTITY_TYPES.register(
@@ -87,10 +95,29 @@ public class SimpleSpells {
             0.0F,
             0.0F));
 
+    public static final DeferredHolder<ArmorMaterial, ArmorMaterial> ARCHMAGE_ARMOR_MATERIAL = ARMOR_MATERIALS.register("archmage", () -> new ArmorMaterial(
+            Util.make(new EnumMap<>(ArmorItem.Type.class), defense -> {
+                defense.put(ArmorItem.Type.BOOTS, 3);
+                defense.put(ArmorItem.Type.LEGGINGS, 6);
+                defense.put(ArmorItem.Type.CHESTPLATE, 8);
+                defense.put(ArmorItem.Type.HELMET, 3);
+                defense.put(ArmorItem.Type.BODY, 11);
+            }),
+            15,
+            SoundEvents.ARMOR_EQUIP_NETHERITE,
+            () -> Ingredient.of(TORMENTITE_CRYSTAL.get()),
+            List.of(new ArmorMaterial.Layer(ResourceLocation.fromNamespaceAndPath(MODID, "archmage"))),
+            3.0F,
+            0.1F));
+
     public static final DeferredItem<ArmorItem> MAGE_HAT = registerMageArmor("mage_hat", ArmorItem.Type.HELMET);
     public static final DeferredItem<ArmorItem> MAGE_ROBES = registerMageArmor("mage_robes", ArmorItem.Type.CHESTPLATE);
     public static final DeferredItem<ArmorItem> MAGE_PANTS = registerMageArmor("mage_pants", ArmorItem.Type.LEGGINGS);
     public static final DeferredItem<ArmorItem> MAGE_BOOTS = registerMageArmor("mage_boots", ArmorItem.Type.BOOTS);
+    public static final DeferredItem<ArmorItem> ARCHMAGE_MASK = registerArchmageArmor("archmage_mask", ArmorItem.Type.HELMET);
+    public static final DeferredItem<ArmorItem> ARCHMAGE_GARBS = registerArchmageArmor("archmage_garbs", ArmorItem.Type.CHESTPLATE);
+    public static final DeferredItem<ArmorItem> ARCHMAGE_PANTS = registerArchmageArmor("archmage_pants", ArmorItem.Type.LEGGINGS);
+    public static final DeferredItem<ArmorItem> ARCHMAGE_BOOTS = registerArchmageArmor("archmage_boots", ArmorItem.Type.BOOTS);
 
     public static final DeferredBlock<Block> EMITITE_ORE = BLOCKS.registerSimpleBlock(
             "emitite_ore",
@@ -111,6 +138,16 @@ public class SimpleSpells {
                     .sound(SoundType.DEEPSLATE));
     public static final DeferredItem<BlockItem> DEEPSLATE_EMITITE_ORE_ITEM = ITEMS.registerSimpleBlockItem("deepslate_emitite_ore", DEEPSLATE_EMITITE_ORE);
 
+    public static final DeferredBlock<Block> TORMENTITE_ORE = BLOCKS.registerSimpleBlock(
+            "tormentite_ore",
+            BlockBehaviour.Properties.ofFullCopy(Blocks.SOUL_SAND)
+                    .mapColor(MapColor.COLOR_PURPLE)
+                    .instrument(NoteBlockInstrument.BASEDRUM)
+                    .requiresCorrectToolForDrops()
+                    .strength(30.0F, 1200.0F)
+                    .sound(SoundType.SOUL_SAND));
+    public static final DeferredItem<BlockItem> TORMENTITE_ORE_ITEM = ITEMS.registerSimpleBlockItem("tormentite_ore", TORMENTITE_ORE);
+
     public static final DeferredBlock<FlowerBlock> MANA_BLOOM = BLOCKS.register(
             "mana_bloom",
             () -> new FlowerBlock(
@@ -122,6 +159,13 @@ public class SimpleSpells {
                             .offsetType(BlockBehaviour.OffsetType.XZ)));
     public static final DeferredItem<BlockItem> MANA_BLOOM_ITEM = ITEMS.registerSimpleBlockItem("mana_bloom", MANA_BLOOM);
 
+    public static final DeferredBlock<MagibulbCropBlock> MAGIBULB_CROP = BLOCKS.register(
+            "magibulb_crop",
+            () -> new MagibulbCropBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.WHEAT)));
+    public static final DeferredItem<ItemNameBlockItem> MAGIBULB_SEEDS = ITEMS.register(
+            "magibulb_seeds",
+            () -> new ItemNameBlockItem(MAGIBULB_CROP.get(), new Item.Properties()));
+
     public static final DeferredHolder<CreativeModeTab, CreativeModeTab> SIMPLE_SPELLS_TAB = CREATIVE_MODE_TABS.register("simple_spells_tab", () -> CreativeModeTab.builder()
             .title(Component.translatable("itemGroup.simplespells")) //The language key for the title of your CreativeModeTab
             .withTabsBefore(CreativeModeTabs.COMBAT)
@@ -129,19 +173,39 @@ public class SimpleSpells {
             .displayItems((parameters, output) -> {
                 output.accept(EMITITE_ORE_ITEM.get());
                 output.accept(DEEPSLATE_EMITITE_ORE_ITEM.get());
+                output.accept(TORMENTITE_ORE_ITEM.get());
                 output.accept(MANA_BLOOM_ITEM.get());
                 output.accept(RAW_EMITITE.get());
                 output.accept(EMITITE.get());
                 output.accept(MAGIC_DUST.get());
+                output.accept(TORMENTITE_SHARD.get());
+                output.accept(TORMENTITE_CRYSTAL.get());
+                output.accept(DEATH_ESSENCE.get());
+                output.accept(MAGIBULB_SEEDS.get());
+                output.accept(MAGIBULB.get());
+                output.accept(LIFE_ESSENCE.get());
                 output.accept(MAGE_STAFF.get());
                 output.accept(MAGE_HAT.get());
                 output.accept(MAGE_ROBES.get());
                 output.accept(MAGE_PANTS.get());
                 output.accept(MAGE_BOOTS.get());
+                output.accept(ARCHMAGE_MASK.get());
+                output.accept(ARCHMAGE_GARBS.get());
+                output.accept(ARCHMAGE_PANTS.get());
+                output.accept(ARCHMAGE_BOOTS.get());
             }).build());
 
     private static DeferredItem<ArmorItem> registerMageArmor(String name, ArmorItem.Type type) {
         return ITEMS.register(name, () -> new ArmorItem(MAGE_ARMOR_MATERIAL, type, new Item.Properties().durability(type.getDurability(15))));
+    }
+
+    private static DeferredItem<ArmorItem> registerArchmageArmor(String name, ArmorItem.Type type) {
+        return ITEMS.register(name, () -> new ArmorItem(
+                ARCHMAGE_ARMOR_MATERIAL,
+                type,
+                new Item.Properties()
+                        .fireResistant()
+                        .durability(type.getDurability(37))));
     }
 
     // The constructor for the mod class is the first code that is run when your mod is loaded.
@@ -189,12 +253,20 @@ public class SimpleSpells {
         if (event.getTabKey() == CreativeModeTabs.BUILDING_BLOCKS) {
             event.accept(EMITITE_ORE_ITEM);
             event.accept(DEEPSLATE_EMITITE_ORE_ITEM);
+            event.accept(TORMENTITE_ORE_ITEM);
         } else if (event.getTabKey() == CreativeModeTabs.NATURAL_BLOCKS) {
             event.accept(MANA_BLOOM_ITEM);
+            event.accept(TORMENTITE_ORE_ITEM);
         } else if (event.getTabKey() == CreativeModeTabs.INGREDIENTS) {
             event.accept(RAW_EMITITE);
             event.accept(EMITITE);
             event.accept(MAGIC_DUST);
+            event.accept(TORMENTITE_SHARD);
+            event.accept(TORMENTITE_CRYSTAL);
+            event.accept(DEATH_ESSENCE);
+            event.accept(MAGIBULB_SEEDS);
+            event.accept(MAGIBULB);
+            event.accept(LIFE_ESSENCE);
         } else if (event.getTabKey() == CreativeModeTabs.TOOLS_AND_UTILITIES) {
             event.accept(MAGE_STAFF);
         } else if (event.getTabKey() == CreativeModeTabs.COMBAT) {
@@ -202,6 +274,21 @@ public class SimpleSpells {
             event.accept(MAGE_ROBES);
             event.accept(MAGE_PANTS);
             event.accept(MAGE_BOOTS);
+            event.accept(ARCHMAGE_MASK);
+            event.accept(ARCHMAGE_GARBS);
+            event.accept(ARCHMAGE_PANTS);
+            event.accept(ARCHMAGE_BOOTS);
+        }
+    }
+
+    @SubscribeEvent
+    public void onRightClickBlock(PlayerInteractEvent.RightClickBlock event) {
+        if (event.getLevel().getBlockState(event.getPos()).is(Blocks.CAMPFIRE) && event.getItemStack().is(TORMENTITE_CRYSTAL.get())) {
+            event.setCanceled(true);
+            event.setCancellationResult(InteractionResult.FAIL);
+        } else if (event.getLevel().getBlockState(event.getPos()).is(Blocks.SOUL_CAMPFIRE) && event.getItemStack().is(MAGIBULB.get())) {
+            event.setCanceled(true);
+            event.setCancellationResult(InteractionResult.FAIL);
         }
     }
 

@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "C": {
+      "item": "minecraft:coal"
+    },
+    "T": {
+      "item": "simplespells:tormentite_crystal"
+    }
+  },
+  "pattern": [
+    "CTC",
+    "C C",
+    "C C"
+  ],
+  "result": {
+    "count": 1,
+    "id": "simplespells:archmage_pants"
+  }
+}

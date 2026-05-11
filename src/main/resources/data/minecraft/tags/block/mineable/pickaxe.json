@@ -2,6 +2,7 @@
   "replace": false,
   "values": [
     "simplespells:emitite_ore",
-    "simplespells:deepslate_emitite_ore"
+    "simplespells:deepslate_emitite_ore",
+    "simplespells:tormentite_ore"
   ]
 }
