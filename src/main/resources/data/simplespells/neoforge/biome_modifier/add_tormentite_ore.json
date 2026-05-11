@@ -1,0 +1,8 @@
+{
+  "type": "neoforge:add_features",
+  "biomes": "minecraft:soul_sand_valley",
+  "features": [
+    "simplespells:ore_tormentite"
+  ],
+  "step": "underground_ores"
+}
