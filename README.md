@@ -18,10 +18,59 @@ Useful commands:
 
 ```powershell
 .\gradlew.bat build
+.\gradlew.bat check
 .\gradlew.bat runClient
 ```
 
 The built mod jar appears in `build/libs`.
+
+`check` runs compilation, Checkstyle, unit tests, and a JaCoCo coverage report. Reports are written to:
+
+- `build/reports/checkstyle/main.html`
+- `build/reports/tests/test/index.html`
+- `build/reports/jacoco/test/html/index.html`
+
+## Optional Local Launcher Scripts
+
+The double-click scripts are local helpers and are intentionally not committed. If you want them, create these two files in the project folder.
+
+`Start-SimpleSpells-Minecraft.cmd`:
+
+```bat
+@echo off
+set "SCRIPT_DIR=%~dp0"
+cd /d "%SCRIPT_DIR%"
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File "%SCRIPT_DIR%Start-SimpleSpells-Minecraft.ps1"
+```
+
+`Start-SimpleSpells-Minecraft.ps1`:
+
+```powershell
+$ErrorActionPreference = 'Stop'
+
+$projectRoot = Split-Path -Parent $PSCommandPath
+Set-Location -LiteralPath $projectRoot
+
+Write-Host ''
+Write-Host 'Starting Minecraft with Simple Spells loaded...'
+Write-Host "Project folder: $projectRoot"
+Write-Host ''
+Write-Host 'This runs the NeoForge Gradle dev client, so it loads the mod directly from this project.'
+Write-Host ''
+
+& '.\gradlew.bat' '--gradle-user-home' '.gradle-user-home' 'runClient'
+$exitCode = $LASTEXITCODE
+
+Write-Host ''
+if ($exitCode -eq 0) {
+    Write-Host 'Minecraft closed.'
+} else {
+    Write-Host "Minecraft or Gradle exited with code $exitCode."
+}
+
+Read-Host 'Press Enter to close this window'
+exit $exitCode
+```
 
 ## Notes
 

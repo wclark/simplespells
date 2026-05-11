@@ -21,5 +21,15 @@ jobs:
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v4
 
-      - name: Build with Gradle
-        run: ./gradlew build
+      - name: Build and check with Gradle
+        run: ./gradlew build jacocoTestReport
+
+      - name: Upload test and coverage reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: verification-reports
+          path: |
+            build/reports/checkstyle/
+            build/reports/tests/
+            build/reports/jacoco/
