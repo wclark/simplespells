@@ -39,3 +39,7 @@ run/
 **/src/generated/**/.cache/
 repo/
 !**/src/**/repo/
+
+### Local helper scripts ###
+Start-SimpleSpells-Minecraft.cmd
+Start-SimpleSpells-Minecraft.ps1
