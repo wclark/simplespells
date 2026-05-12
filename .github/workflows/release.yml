@@ -60,7 +60,7 @@ jobs:
         run: chmod +x ./gradlew
 
       - name: Build release jar
-        run: ./gradlew --no-daemon clean build jacocoTestReport
+        run: ./gradlew --no-daemon build jacocoTestReport
 
       - name: Publish GitHub release
         env:
