@@ -8,7 +8,7 @@ Simple Spells is a NeoForge mod for Minecraft 1.21.1.
 - Minecraft: 1.21.1
 - NeoForge: 21.1.219
 - Java: 21
-- Gradle wrapper: 9.2.1
+- Gradle wrapper: 9.5.0
 
 ## Development
 
