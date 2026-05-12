@@ -1,7 +1,9 @@
 package com.github.wclark.simplespells;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.item.ItemProperties;
 import net.minecraft.client.renderer.entity.NoopRenderer;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.api.distmarker.Dist;
@@ -10,9 +12,9 @@ import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
 import net.neoforged.neoforge.client.event.EntityRenderersEvent;
+import net.neoforged.neoforge.client.event.InputEvent;
 import net.neoforged.neoforge.client.gui.ConfigurationScreen;
 import net.neoforged.neoforge.client.gui.IConfigScreenFactory;
-import net.neoforged.neoforge.client.event.InputEvent;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.network.PacketDistributor;
 
@@ -34,10 +36,15 @@ public class SimpleSpellsClient {
         // Some client setup code
         SimpleSpells.LOGGER.info("HELLO FROM CLIENT SETUP");
         SimpleSpells.LOGGER.info("MINECRAFT NAME >> {}", Minecraft.getInstance().getUser().getName());
+        event.enqueueWork(() -> ItemProperties.register(
+                SimpleSpells.MAGE_STAFF.get(),
+                ResourceLocation.fromNamespaceAndPath(SimpleSpells.MODID, "spell_mode"),
+                (stack, level, entity, seed) -> MageStaffItem.getMode(stack).ordinal()));
     }
 
     static void registerRenderers(EntityRenderersEvent.RegisterRenderers event) {
         event.registerEntityRenderer(SimpleSpells.SPELL_PROJECTILE.get(), NoopRenderer::new);
+        event.registerEntityRenderer(SimpleSpells.ARCHMAGE_SPELL_PROJECTILE.get(), NoopRenderer::new);
     }
 
     static void onStaffCastInput(InputEvent.InteractionKeyMappingTriggered event) {
@@ -47,7 +54,7 @@ public class SimpleSpellsClient {
         }
 
         ItemStack stack = minecraft.player.getMainHandItem();
-        if (!stack.is(SimpleSpells.MAGE_STAFF.get()) || minecraft.player.getCooldowns().isOnCooldown(SimpleSpells.MAGE_STAFF.get())) {
+        if (!StaffCasting.canRequestCast(stack, minecraft.player)) {
             return;
         }
 

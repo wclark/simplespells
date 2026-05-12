@@ -9,6 +9,7 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
+import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.monster.MagmaCube;
@@ -24,6 +25,7 @@ import net.minecraft.world.phys.Vec3;
 
 public class MageStaffItem extends SwordItem {
     public static final int SPELL_COOLDOWN_TICKS = 40;
+    public static final int FULL_MAGE_ARMOR_SPELL_COOLDOWN_TICKS = 20;
     private static final String MODE_TAG = "SpellMode";
 
     public MageStaffItem(Properties properties) {
@@ -60,7 +62,7 @@ public class MageStaffItem extends SwordItem {
 
         if (!consumeMagicDust(player)) {
             triggerBacklash(player);
-            player.getCooldowns().addCooldown(SimpleSpells.MAGE_STAFF.get(), SPELL_COOLDOWN_TICKS);
+            player.getCooldowns().addCooldown(SimpleSpells.MAGE_STAFF.get(), getSpellCooldownTicks(player));
             player.swing(InteractionHand.MAIN_HAND, true);
             return true;
         }
@@ -76,9 +78,20 @@ public class MageStaffItem extends SwordItem {
         level.addFreshEntity(projectile);
 
         level.playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.ILLUSIONER_CAST_SPELL, SoundSource.PLAYERS, 0.7F, 1.45F);
-        player.getCooldowns().addCooldown(SimpleSpells.MAGE_STAFF.get(), SPELL_COOLDOWN_TICKS);
+        player.getCooldowns().addCooldown(SimpleSpells.MAGE_STAFF.get(), getSpellCooldownTicks(player));
         player.swing(InteractionHand.MAIN_HAND, true);
         return true;
+    }
+
+    static int getSpellCooldownTicks(Player player) {
+        return isWearingFullMageArmor(player) ? FULL_MAGE_ARMOR_SPELL_COOLDOWN_TICKS : SPELL_COOLDOWN_TICKS;
+    }
+
+    private static boolean isWearingFullMageArmor(Player player) {
+        return player.getItemBySlot(EquipmentSlot.HEAD).is(SimpleSpells.MAGE_HAT.get())
+                && player.getItemBySlot(EquipmentSlot.CHEST).is(SimpleSpells.MAGE_ROBES.get())
+                && player.getItemBySlot(EquipmentSlot.LEGS).is(SimpleSpells.MAGE_PANTS.get())
+                && player.getItemBySlot(EquipmentSlot.FEET).is(SimpleSpells.MAGE_BOOTS.get());
     }
 
     private static boolean consumeMagicDust(ServerPlayer player) {

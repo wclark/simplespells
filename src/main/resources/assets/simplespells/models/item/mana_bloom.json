@@ -1,3 +1,6 @@
 {
-  "parent": "simplespells:block/mana_bloom"
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "simplespells:item/mana_bloom"
+  }
 }

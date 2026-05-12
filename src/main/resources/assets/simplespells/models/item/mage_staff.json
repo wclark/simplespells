@@ -2,5 +2,25 @@
   "parent": "minecraft:item/handheld",
   "textures": {
     "layer0": "simplespells:item/mage_staff"
-  }
+  },
+  "overrides": [
+    {
+      "predicate": {
+        "simplespells:spell_mode": 1.0
+      },
+      "model": "simplespells:item/mage_staff_damage"
+    },
+    {
+      "predicate": {
+        "simplespells:spell_mode": 2.0
+      },
+      "model": "simplespells:item/mage_staff_good_effect"
+    },
+    {
+      "predicate": {
+        "simplespells:spell_mode": 3.0
+      },
+      "model": "simplespells:item/mage_staff_bad_effect"
+    }
+  ]
 }

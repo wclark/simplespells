@@ -19,7 +19,7 @@ public record CastStaffPayload() implements CustomPacketPayload {
 
     public static void handle(CastStaffPayload payload, IPayloadContext context) {
         if (context.player() instanceof ServerPlayer player) {
-            MageStaffItem.cast(player);
+            StaffCasting.cast(player);
         }
     }
 }

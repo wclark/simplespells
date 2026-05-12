@@ -30,6 +30,12 @@ The built mod jar appears in `build/libs`.
 - `build/reports/tests/test/index.html`
 - `build/reports/jacoco/test/html/index.html`
 
+## Releases
+
+GitHub Releases are built from version tags. To publish a release, update `mod_version` in `gradle.properties`, commit the change, then push a tag such as `v1.0.0`.
+
+The release workflow builds the project on GitHub and attaches `simplespells.jar` to the release. Players can download that jar and place it in their Minecraft instance's `mods` folder.
+
 ## Optional Local Launcher Scripts
 
 The double-click scripts are local helpers and are intentionally not committed. If you want them, create these two files in the project folder.

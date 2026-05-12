@@ -71,6 +71,12 @@ public class SimpleSpells {
     public static final DeferredItem<Item> MAGIBULB = ITEMS.registerSimpleItem("magibulb");
     public static final DeferredItem<Item> LIFE_ESSENCE = ITEMS.registerSimpleItem("life_essence");
     public static final DeferredItem<MageStaffItem> MAGE_STAFF = ITEMS.register("mage_staff", () -> new MageStaffItem(new Item.Properties().stacksTo(1)));
+    public static final DeferredItem<ArchmageStaffItem> STAFF_OF_TORMENT = ITEMS.register(
+            "staff_of_torment",
+            () -> new ArchmageStaffItem(ArchmageStaffSpell.TORMENT, new Item.Properties().stacksTo(1)));
+    public static final DeferredItem<ArchmageStaffItem> STAFF_OF_RELIEF = ITEMS.register(
+            "staff_of_relief",
+            () -> new ArchmageStaffItem(ArchmageStaffSpell.RELIEF, new Item.Properties().stacksTo(1)));
 
     public static final DeferredHolder<EntityType<?>, EntityType<SpellProjectile>> SPELL_PROJECTILE = ENTITY_TYPES.register(
             "spell_projectile",
@@ -79,6 +85,13 @@ public class SimpleSpells {
                     .clientTrackingRange(4)
                     .updateInterval(1)
                     .build("spell_projectile"));
+    public static final DeferredHolder<EntityType<?>, EntityType<ArchmageSpellProjectile>> ARCHMAGE_SPELL_PROJECTILE = ENTITY_TYPES.register(
+            "archmage_spell_projectile",
+            () -> EntityType.Builder.<ArchmageSpellProjectile>of(ArchmageSpellProjectile::new, MobCategory.MISC)
+                    .sized(0.34F, 0.34F)
+                    .clientTrackingRange(4)
+                    .updateInterval(1)
+                    .build("archmage_spell_projectile"));
 
     public static final DeferredHolder<ArmorMaterial, ArmorMaterial> MAGE_ARMOR_MATERIAL = ARMOR_MATERIALS.register("mage", () -> new ArmorMaterial(
             Util.make(new EnumMap<>(ArmorItem.Type.class), defense -> {
@@ -169,7 +182,7 @@ public class SimpleSpells {
     public static final DeferredHolder<CreativeModeTab, CreativeModeTab> SIMPLE_SPELLS_TAB = CREATIVE_MODE_TABS.register("simple_spells_tab", () -> CreativeModeTab.builder()
             .title(Component.translatable("itemGroup.simplespells")) //The language key for the title of your CreativeModeTab
             .withTabsBefore(CreativeModeTabs.COMBAT)
-            .icon(() -> RAW_EMITITE.get().getDefaultInstance())
+            .icon(() -> EMITITE.get().getDefaultInstance())
             .displayItems((parameters, output) -> {
                 output.accept(EMITITE_ORE_ITEM.get());
                 output.accept(DEEPSLATE_EMITITE_ORE_ITEM.get());
@@ -185,6 +198,8 @@ public class SimpleSpells {
                 output.accept(MAGIBULB.get());
                 output.accept(LIFE_ESSENCE.get());
                 output.accept(MAGE_STAFF.get());
+                output.accept(STAFF_OF_TORMENT.get());
+                output.accept(STAFF_OF_RELIEF.get());
                 output.accept(MAGE_HAT.get());
                 output.accept(MAGE_ROBES.get());
                 output.accept(MAGE_PANTS.get());
@@ -269,6 +284,8 @@ public class SimpleSpells {
             event.accept(LIFE_ESSENCE);
         } else if (event.getTabKey() == CreativeModeTabs.TOOLS_AND_UTILITIES) {
             event.accept(MAGE_STAFF);
+            event.accept(STAFF_OF_TORMENT);
+            event.accept(STAFF_OF_RELIEF);
         } else if (event.getTabKey() == CreativeModeTabs.COMBAT) {
             event.accept(MAGE_HAT);
             event.accept(MAGE_ROBES);

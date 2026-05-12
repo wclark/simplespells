@@ -1,0 +1,27 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "B": {
+      "item": "minecraft:blaze_rod"
+    },
+    "D": {
+      "item": "minecraft:diamond"
+    },
+    "E": {
+      "item": "simplespells:emitite"
+    },
+    "T": {
+      "item": "simplespells:tormentite_crystal"
+    }
+  },
+  "pattern": [
+    "BTB",
+    " E ",
+    " D "
+  ],
+  "result": {
+    "count": 1,
+    "id": "simplespells:staff_of_torment"
+  }
+}
